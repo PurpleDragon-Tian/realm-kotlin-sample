@@ -1,0 +1,44 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Building Intro [Debug]
+      working-directory: ./Intro
+      run: |
+        chmod +x gradlew
+        ./gradlew buildDebug
+
+    - name: Building Bookshelf [Debug]
+      working-directory: ./Bookshelf
+      run: |
+        chmod +x gradlew
+        ./gradlew buildDebug
+        
+    - name: Building KMP Demo
+      working-directory: ./MultiplatformDemo
+      run: |
+        chmod +x gradlew
+        ./gradlew assemble  
+        
+    - name: JVM Console
+      working-directory: ./JVMConsole
+      run: |
+        chmod +x gradlew
+        ./gradlew jar        
